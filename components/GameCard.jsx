@@ -1,14 +1,39 @@
-import { useEffect, useRef } from "react";
-import { View, StyleSheet, Text, Image, Animated } from "react-native";
+import { useEffect, useRef } from 'react';
+import { View, StyleSheet, Text, Image, Animated, Pressable } from 'react-native';
+import { Score } from './Score';
+import { Link } from 'expo-router';
+
+
+// another way to change opacity with natiwind
+import {styled} from "nativewind"
+
+const StylePressable = styled(Pressable);
 
 export function GameCard({ game }) {
   return (
-    <View key={game.slug} style={styles.card}>
-      <Image source={{ uri: game.image }} style={styles.image} />
-      <Text style={styles.title}>{game.title}</Text>
-      <Text style={styles.score}>{game.score}</Text>
-      <Text style={styles.description}>{game.description}</Text>
-    </View>
+    <Link
+      asChild
+      href={`/${game.slug}`}
+      
+    >
+      <StylePressable className="active:opacity-70 border border-black active:border-white/50 mb-2 bg-slate-500/10 rounded-xl p-4">
+        <View
+          key={game.slug}
+          className="flex-row  gap-4 "
+        >
+          <Image source={{ uri: game.image }} style={styles.image} />
+          <View className="flex-shrink">
+            <Text className="mb-1" style={styles.title}>
+              {game.title}
+            </Text>
+            <Score score={game.score} maxScore={100} />
+            <Text className="mt-2" style={styles.description}>
+              {game.description.slice(0, 100)}
+            </Text>
+          </View>
+        </View>
+      </StylePressable>
+    </Link>
   );
 }
 
@@ -20,7 +45,7 @@ export function AnimatedGameCard({ game, index }) {
       toValue: 1,
       duration: 1000,
       delay: index * 250,
-      useNativeDriver: true,
+      useNativeDriver: true
     }).start();
   }, [opacity, index]);
 
@@ -33,27 +58,27 @@ export function AnimatedGameCard({ game, index }) {
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 42,
+    marginBottom: 42
   },
   image: {
     width: 107,
     height: 147,
-    borderRadius: 10,
+    borderRadius: 10
   },
   title: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff",
-    marginTop: 10,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 10
   },
   description: {
     fontSize: 16,
-    color: "#eee",
+    color: '#eee'
   },
   score: {
     fontSize: 20,
-    fontWeight: "bold",
-    color: "green",
-    marginBottom: 10,
-  },
+    fontWeight: 'bold',
+    color: 'green',
+    marginBottom: 10
+  }
 });
